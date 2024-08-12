@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface TransactionService {
     List<Transaction> findAll();
+
     Transaction insert(TransactionRequest transactionRequest);
 
     Transaction findById(Integer transactionId);

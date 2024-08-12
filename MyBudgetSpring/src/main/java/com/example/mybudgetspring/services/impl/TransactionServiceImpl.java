@@ -44,7 +44,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction findById(Integer transactionId) {
-        return modelMapper.map(transactionEntityRepository.findById(transactionId).orElseThrow(NotFoundException::new),Transaction.class);
+        return modelMapper.map(transactionEntityRepository.findById(transactionId).orElseThrow(NotFoundException::new), Transaction.class);
     }
 
     @Override

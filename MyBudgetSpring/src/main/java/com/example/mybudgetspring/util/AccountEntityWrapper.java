@@ -1,7 +1,9 @@
 package com.example.mybudgetspring.util;
+
 import com.example.mybudgetspring.model.entities.AccountEntity;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.util.List;
 
 @XmlRootElement(name = "Accounts")

@@ -9,11 +9,13 @@ import java.util.List;
 
 public interface AccountService {
     List<Account> findAll();
+
     Account insert(AccountRequest accountRequest);
 
     Account findById(Integer accountId);
 
     void delete(Integer accountId);
+
     void deleteAll();
 
     void loadXml() throws IOException, JAXBException;

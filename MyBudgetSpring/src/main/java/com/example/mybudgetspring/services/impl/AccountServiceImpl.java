@@ -72,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void loadXml() throws IOException, JAXBException {
-        if(accountEntityRepository.count() == 0) {
+        if (accountEntityRepository.count() == 0) {
             List<AccountEntity> accounts = XMLParserUtil.parseXMLData();
             accounts.forEach(account -> {
                 account.setAccountId(null);
