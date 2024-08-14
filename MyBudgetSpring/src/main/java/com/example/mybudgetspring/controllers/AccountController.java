@@ -25,9 +25,9 @@ public class AccountController {
         accountService.loadXml();
     }
 
-    @GetMapping
-    public List<Account> findAll() {
-        return accountService.findAll();
+    @GetMapping("/{defaultCurrency}")
+    public List<Account> findAllDefault(@PathVariable String defaultCurrency) {
+        return accountService.findAllDefault(defaultCurrency);
     }
 
     @PostMapping

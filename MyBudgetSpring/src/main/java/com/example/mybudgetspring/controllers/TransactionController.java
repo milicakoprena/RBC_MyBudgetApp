@@ -17,9 +17,9 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping
-    public List<Transaction> findAll(){
-        return transactionService.findAll();
+    @GetMapping("/{defaultCurrency}")
+    public List<Transaction> findAllDefault(@PathVariable String defaultCurrency){
+        return transactionService.findAllDefault(defaultCurrency);
     }
 
     @PostMapping

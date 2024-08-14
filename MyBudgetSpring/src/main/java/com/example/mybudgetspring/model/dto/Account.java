@@ -15,4 +15,5 @@ public class Account implements Serializable {
     private String name;
     private String currency;
     private Double balance;
+    private Double defaultCurrencyBalance;
 }

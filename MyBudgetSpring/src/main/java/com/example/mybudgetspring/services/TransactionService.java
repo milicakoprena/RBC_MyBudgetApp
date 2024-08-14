@@ -8,6 +8,8 @@ import java.util.List;
 public interface TransactionService {
     List<Transaction> findAll();
 
+    List<Transaction> findAllDefault(String defaultCurrency);
+
     Transaction insert(TransactionRequest transactionRequest);
 
     Transaction findById(Integer transactionId);

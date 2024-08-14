@@ -10,6 +10,8 @@ import java.util.List;
 public interface AccountService {
     List<Account> findAll();
 
+    List<Account> findAllDefault(String defaultCurrency);
+
     Account insert(AccountRequest accountRequest);
 
     Account findById(Integer accountId);

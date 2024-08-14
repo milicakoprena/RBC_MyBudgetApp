@@ -13,5 +13,6 @@ public class Transaction implements Serializable {
     private Integer transactionId;
     private String description;
     private Double amount;
+    private Double defaultCurrencyAmount;
     private Account account;
 }
