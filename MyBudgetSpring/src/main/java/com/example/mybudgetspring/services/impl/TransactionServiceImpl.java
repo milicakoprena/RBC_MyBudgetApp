@@ -73,10 +73,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction insert(TransactionRequest transactionRequest, String defaultCurrency) throws JsonProcessingException {
         AccountEntity accountEntity = accountEntityRepository.findById(transactionRequest.getAccountId()).get();
-        Double updatedBalance = accountEntity.getBalance() + transactionRequest.getAmount() * currencyService.convertCurrency(defaultCurrency, accountEntity.getCurrency());
+        Double convertedAmount = transactionRequest.getAmount() * currencyService.convertCurrency(defaultCurrency, accountEntity.getCurrency());
+        Double updatedBalance = accountEntity.getBalance() + convertedAmount;
         if (updatedBalance < 0) throw new NotFoundException();
         TransactionEntity transactionEntity = modelMapper.map(transactionRequest, TransactionEntity.class);
         transactionEntity.setTransactionId(null);
+        transactionEntity.setAmount(convertedAmount);
         accountEntityRepository.findById(transactionRequest.getAccountId()).get().setBalance(updatedBalance);
         transactionEntity = transactionEntityRepository.saveAndFlush(transactionEntity);
         entityManager.refresh(transactionEntity);
