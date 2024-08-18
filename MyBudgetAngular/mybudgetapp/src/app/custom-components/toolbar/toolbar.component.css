@@ -1,0 +1,33 @@
+mat-toolbar {
+  background-color: #b3a5b1;
+  color: #4d4d4d;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+mat-toolbar mat-toolbar-row {
+  justify-content: space-between;
+  align-items: end;
+  width: 60%;
+}
+
+.toolbar-title {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+mat-toolbar button {
+  color: #4d4d4d;
+  text-align: center;
+  font-size: 18px;
+}
+
+.buttons {
+  gap: 10px;
+}

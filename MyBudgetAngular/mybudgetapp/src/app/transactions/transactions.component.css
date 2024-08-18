@@ -1,0 +1,61 @@
+.transactions-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-grow: 1;
+  overflow-y: visible;
+}
+
+mat-card {
+  max-height: 56vh;
+  height: fit-content;
+  width: 57vw;
+  overflow: hidden;
+}
+
+mat-card-content {
+  height: 100%;
+  overflow-y: auto;
+  background-color: transparent;
+}
+
+.transaction {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f6f3f1;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 0px 5px 15px 5px;
+  word-wrap: break-word;
+}
+.transaction-details,
+.transaction-amount {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  gap: 10px;
+}
+
+.transaction-details {
+  text-align: start;
+}
+
+.transaction-amount {
+  text-align: end;
+}
+
+.transaction-name,
+.default-currency-amount {
+  font-size: 20px;
+}
+
+.chosen-currency-amount {
+  font-size: 16px;
+}
+
+.transactions-card mat-form-field {
+  max-width: 40%;
+  align-self: flex-end;
+}

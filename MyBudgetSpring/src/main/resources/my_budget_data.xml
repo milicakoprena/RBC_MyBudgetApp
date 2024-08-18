@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Accounts>
-    <Account name="John Doe" currency="EUR">
+    <Account name="Bank" currency="EUR">
         <Balance>1200.50</Balance>
         <Transactions>
             <Transaction>
@@ -17,7 +17,7 @@
             </Transaction>
         </Transactions>
     </Account>
-    <Account name="Jane Smith" currency="USD">
+    <Account name="Savings" currency="USD">
         <Balance>875.20</Balance>
         <Transactions>
             <Transaction>
@@ -30,7 +30,7 @@
             </Transaction>
         </Transactions>
     </Account>
-    <Account name="Michael Brown" currency="EUR">
+    <Account name="Cash" currency="EUR">
         <Balance>320.75</Balance>
         <Transactions>
             <Transaction>
@@ -43,7 +43,7 @@
             </Transaction>
         </Transactions>
     </Account>
-    <Account name="Emily Johnson" currency="EUR">
+    <Account name="Holiday" currency="EUR">
         <Balance>550.10</Balance>
     </Account>
 </Accounts>

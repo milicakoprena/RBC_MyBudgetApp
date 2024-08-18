@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class CurrencyServiceImpl implements CurrencyService {
     private final ModelMapper modelMapper;
     private final WebClient webClient;
+
 
     public CurrencyServiceImpl(ModelMapper modelMapper, WebClient webClient) {
         this.modelMapper = modelMapper;
@@ -53,7 +55,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public double convertCurrency(String fromCurrency, String toCurrency) throws JsonProcessingException {
         String jsonResponse = webClient.get()
-                .uri("/currencies/" + fromCurrency + ".json")
+                .uri("/currencies/" + fromCurrency.toLowerCase() + ".json")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();

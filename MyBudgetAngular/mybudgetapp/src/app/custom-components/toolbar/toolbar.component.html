@@ -1,0 +1,14 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <span class="toolbar-title">My Budget</span>
+    <div class="buttons">
+      <button
+        mat-button
+        [routerLink]="button.route"
+        *ngFor="let button of toolbarButtons"
+      >
+        {{ button.name }}
+      </button>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

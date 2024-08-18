@@ -66,9 +66,19 @@ public class AccountServiceImpl implements AccountService {
                             throw new RuntimeException("Error converting currency for account: " + account.getAccountId(), e);
                         }
                     }
+                    else{
+                        account.setDefaultCurrencyBalance(account.getBalance());
+                    }
                     return account;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Double getAccountBalanceSum(String defaultCurrency){
+        BigDecimal balanceSumRounded = new BigDecimal(findAllDefault(defaultCurrency).stream().mapToDouble(Account::getDefaultCurrencyBalance).sum())
+                .setScale(2, RoundingMode.HALF_UP);
+        return balanceSumRounded.doubleValue();
     }
 
     @Override

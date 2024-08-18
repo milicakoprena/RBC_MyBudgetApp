@@ -12,6 +12,8 @@ public interface AccountService {
 
     List<Account> findAllDefault(String defaultCurrency);
 
+    Double getAccountBalanceSum(String defaultCurrency);
+
     Account insert(AccountRequest accountRequest);
 
     Account findById(Integer accountId);

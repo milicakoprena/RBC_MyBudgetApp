@@ -1,0 +1,33 @@
+<div class="transactions-card">
+  <mat-form-field class="account-filter">
+    <mat-label>Filter by account</mat-label>
+    <mat-select (selectionChange)="onOptionSelected($event.value)">
+      <mat-option *ngFor="let account of accounts" [value]="account.accountId">
+        {{ account.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="transaction" *ngFor="let transaction of filteredTransactions">
+        <div class="transaction-details">
+          <div class="transaction-name">{{ transaction.description }}</div>
+          <div class="account-name">{{ transaction.account.name }}</div>
+        </div>
+
+        <div class="transaction-amount">
+          <div class="default-currency-amount">
+            {{ transaction.defaultCurrencyAmount }} {{ defaultCurrency }}
+          </div>
+          <div
+            class="chosen-currency-amount"
+            *ngIf="transaction.account.currency !== defaultCurrency"
+          >
+            {{ transaction.amount }} {{ transaction.account.currency }}
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

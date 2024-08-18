@@ -2,8 +2,10 @@ package com.example.mybudgetspring.services.impl;
 
 import com.example.mybudgetspring.exceptions.NotFoundException;
 import com.example.mybudgetspring.model.dto.Transaction;
+import com.example.mybudgetspring.model.entities.AccountEntity;
 import com.example.mybudgetspring.model.entities.TransactionEntity;
 import com.example.mybudgetspring.model.requests.TransactionRequest;
+import com.example.mybudgetspring.repositories.AccountEntityRepository;
 import com.example.mybudgetspring.repositories.TransactionEntityRepository;
 import com.example.mybudgetspring.services.CurrencyService;
 import com.example.mybudgetspring.services.TransactionService;
@@ -24,13 +26,15 @@ import java.util.stream.Collectors;
 public class TransactionServiceImpl implements TransactionService {
     private final ModelMapper modelMapper;
     private final TransactionEntityRepository transactionEntityRepository;
+    private final AccountEntityRepository accountEntityRepository;
     private final CurrencyService currencyService;
     @PersistenceContext
     EntityManager entityManager;
 
-    public TransactionServiceImpl(ModelMapper modelMapper, TransactionEntityRepository transactionEntityRepository, CurrencyService currencyService) {
+    public TransactionServiceImpl(ModelMapper modelMapper, TransactionEntityRepository transactionEntityRepository, AccountEntityRepository accountEntityRepository, CurrencyService currencyService) {
         this.modelMapper = modelMapper;
         this.transactionEntityRepository = transactionEntityRepository;
+        this.accountEntityRepository = accountEntityRepository;
         this.currencyService = currencyService;
     }
 
@@ -58,6 +62,8 @@ public class TransactionServiceImpl implements TransactionService {
                         } catch (JsonProcessingException e) {
                             throw new RuntimeException("Error converting currency for transaction: " + transaction.getTransactionId(), e);
                         }
+                    } else {
+                        transaction.setDefaultCurrencyAmount(transaction.getAmount());
                     }
                     return transaction;
                 })
@@ -65,9 +71,13 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction insert(TransactionRequest transactionRequest) {
+    public Transaction insert(TransactionRequest transactionRequest, String defaultCurrency) throws JsonProcessingException {
+        AccountEntity accountEntity = accountEntityRepository.findById(transactionRequest.getAccountId()).get();
+        Double updatedBalance = accountEntity.getBalance() + transactionRequest.getAmount() * currencyService.convertCurrency(defaultCurrency, accountEntity.getCurrency());
+        if (updatedBalance < 0) throw new NotFoundException();
         TransactionEntity transactionEntity = modelMapper.map(transactionRequest, TransactionEntity.class);
         transactionEntity.setTransactionId(null);
+        accountEntityRepository.findById(transactionRequest.getAccountId()).get().setBalance(updatedBalance);
         transactionEntity = transactionEntityRepository.saveAndFlush(transactionEntity);
         entityManager.refresh(transactionEntity);
         return findById(transactionEntity.getTransactionId());

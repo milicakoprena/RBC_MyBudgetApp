@@ -2,9 +2,9 @@ package com.example.mybudgetspring.controllers;
 
 import com.example.mybudgetspring.model.responses.CurrencyResponse;
 import com.example.mybudgetspring.services.CurrencyService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.mybudgetspring.util.DefaultCurrencyService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -12,9 +12,11 @@ import java.util.List;
 @RequestMapping("/currencies")
 public class CurrencyController {
     private final CurrencyService currencyService;
+    private final DefaultCurrencyService defaultCurrencyService;
 
-    public CurrencyController(CurrencyService currencyService) {
+    public CurrencyController(CurrencyService currencyService, DefaultCurrencyService defaultCurrencyService) {
         this.currencyService = currencyService;
+        this.defaultCurrencyService = defaultCurrencyService;
     }
 
     @GetMapping
@@ -22,4 +24,13 @@ public class CurrencyController {
         return currencyService.getAll();
     }
 
+    @GetMapping("/default")
+    public ResponseEntity<String> getDefaultCurrency() {
+        return ResponseEntity.ok(defaultCurrencyService.getDefaultCurrency());
+    }
+
+    @PutMapping("/update")
+    public void updateDefaultCurrency(@RequestBody String newCurrency) {
+        defaultCurrencyService.setDefaultCurrency(newCurrency);
+    }
 }

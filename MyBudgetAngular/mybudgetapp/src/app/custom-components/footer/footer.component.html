@@ -1,0 +1,10 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button mat-button (click)="openTransactionDialog()">
+      New transaction
+    </button>
+    <span class="available-balance"
+      >Available: {{ totalBalance }} {{ defaultCurrency }}</span
+    >
+  </mat-toolbar-row>
+</mat-toolbar>

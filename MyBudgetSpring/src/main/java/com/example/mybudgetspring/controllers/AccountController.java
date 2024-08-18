@@ -3,6 +3,8 @@ package com.example.mybudgetspring.controllers;
 import com.example.mybudgetspring.model.dto.Account;
 import com.example.mybudgetspring.model.requests.AccountRequest;
 import com.example.mybudgetspring.services.AccountService;
+import com.example.mybudgetspring.services.CurrencyService;
+import com.example.mybudgetspring.util.DefaultCurrencyService;
 import jakarta.annotation.PostConstruct;
 import jakarta.xml.bind.JAXBException;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,11 @@ import java.util.List;
 @RequestMapping("/accounts")
 public class AccountController {
     private final AccountService accountService;
+    private final DefaultCurrencyService defaultCurrencyService;
 
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, CurrencyService currencyService, DefaultCurrencyService defaultCurrencyService) {
         this.accountService = accountService;
+        this.defaultCurrencyService = defaultCurrencyService;
     }
 
     @PostConstruct
@@ -25,9 +29,14 @@ public class AccountController {
         accountService.loadXml();
     }
 
-    @GetMapping("/{defaultCurrency}")
-    public List<Account> findAllDefault(@PathVariable String defaultCurrency) {
-        return accountService.findAllDefault(defaultCurrency);
+    @GetMapping("/default")
+    public List<Account> findAllDefault() {
+        return accountService.findAllDefault(defaultCurrencyService.getDefaultCurrency());
+    }
+
+    @GetMapping("/sum")
+    public Double getAccountBalanceSum() {
+        return accountService.getAccountBalanceSum(defaultCurrencyService.getDefaultCurrency());
     }
 
     @PostMapping

@@ -1,0 +1,32 @@
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.transaction-form mat-form-field {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.number-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.number-wrapper input {
+  flex: 1;
+}
+
+.currency-suffix {
+  margin-left: 8px;
+  font-size: 14px;
+}
