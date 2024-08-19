@@ -23,4 +23,8 @@ export class AccountService {
   addAccount(accountRequest: AccountRequest) {
     return this.httpClient.post(this.apiUrl, accountRequest);
   }
+
+  deleteAllAccounts() {
+    return this.httpClient.delete(this.apiUrl);
+  }
 }

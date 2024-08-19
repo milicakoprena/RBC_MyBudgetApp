@@ -10,10 +10,12 @@ export class CurrencyService {
   private apiUrl = 'http://localhost:8080/currencies';
   private CURRENCIES_KEY = 'currencies';
   private DEFAULT_CURRENCY_KEY = 'default_currency';
+  private EXCHANGE_RATE_DATE_KEY = 'exchange_rate_date';
 
   constructor(private httpClient: HttpClient) {
     this.loadCurrencies();
     this.loadDefaultCurrency();
+    this.loadLatestExchangeRateDate();
   }
 
   loadCurrencies(): void {
@@ -52,5 +54,19 @@ export class CurrencyService {
         localStorage.setItem(this.DEFAULT_CURRENCY_KEY, defaultCurrency);
       })
     );
+  }
+
+  loadLatestExchangeRateDate() {
+    this.httpClient
+      .get(`${this.apiUrl}/date`, {
+        responseType: 'text',
+      })
+      .subscribe((date) => {
+        localStorage.setItem(this.EXCHANGE_RATE_DATE_KEY, date);
+      });
+  }
+
+  getLatestExchangeRateDate() {
+    return localStorage.getItem(this.EXCHANGE_RATE_DATE_KEY) || '';
   }
 }

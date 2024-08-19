@@ -11,7 +11,7 @@ mat-card {
 
 mat-card-content {
   height: 100%;
-  background-color: transparent;
+  background-color: #f5f5f5;
 }
 
 .card-row {
@@ -19,18 +19,24 @@ mat-card-content {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: #f6f3f1;
-  padding: 10px;
+  background-color: #ede5e1;
+  padding: 10px 20px;
   border-radius: 10px;
   margin: 0px 5px 15px 5px;
+  height: 10vh;
 }
 
 .card-row form {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .row-name {
   font-size: 20px;
+}
+
+.delete-row {
+  font-size: 20px;
+  cursor: pointer;
 }
 
 ::ng-deep .mat-autocomplete-panel {

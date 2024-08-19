@@ -16,7 +16,6 @@ import { CommonModule } from '@angular/common';
 import { AccountRequest } from '../../model/account-request';
 import { AccountService } from '../../services/account.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-new-account-dialog',

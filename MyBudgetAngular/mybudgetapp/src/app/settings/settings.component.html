@@ -28,6 +28,13 @@
           </mat-form-field>
         </form>
       </div>
+      <div class="card-row delete-row" (click)="openDeleteDialog()">
+        Delete all data
+      </div>
+      <div class="card-row">
+        <div class="row-name">Exhange rate updated</div>
+        <div class="row-name">{{ exchangeRateDate }}</div>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

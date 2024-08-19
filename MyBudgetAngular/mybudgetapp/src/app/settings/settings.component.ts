@@ -8,6 +8,7 @@ import { Observable, map, startWith } from 'rxjs';
 import { CurrencyDialogComponent } from './currency-dialog/currency-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteDataDialogComponent } from './delete-data-dialog/delete-data-dialog.component';
 
 @Component({
   selector: 'app-settings',
@@ -23,6 +24,7 @@ export class SettingsComponent implements OnInit {
     CurrencyResponse[]
   >();
   public defaultCurrency: string = '';
+  public exchangeRateDate: string = '';
 
   constructor(
     private currencyService: CurrencyService,
@@ -33,10 +35,15 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.loadDefaultCurrency();
     this.loadCurrencies();
+    this.loadExchangeRateDate();
   }
 
   private loadDefaultCurrency() {
     this.defaultCurrency = this.currencyService.getDefaultCurrency();
+  }
+
+  private loadExchangeRateDate() {
+    this.exchangeRateDate = this.currencyService.getLatestExchangeRateDate();
   }
 
   private loadCurrencies() {
@@ -83,5 +90,9 @@ export class SettingsComponent implements OnInit {
         { duration: 3000 }
       );
     });
+  }
+
+  openDeleteDialog() {
+    this.dialog.open(DeleteDataDialogComponent);
   }
 }

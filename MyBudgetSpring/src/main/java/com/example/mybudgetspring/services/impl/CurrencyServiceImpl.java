@@ -6,12 +6,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +71,24 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
 
         return currencyRates.get(toCurrency.toLowerCase()).asDouble();
+    }
+
+    @Override
+    public String getLatestExchangeRateDate(String defaultCurrency) throws JsonProcessingException {
+        String jsonResponse = webClient.get()
+                .uri("/currencies/" + defaultCurrency.toLowerCase() + ".json")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(jsonResponse);
+        JsonNode dateNode = rootNode.get("date");
+
+        LocalDate date = LocalDate.parse(dateNode.asText());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        return date.format(formatter);
     }
 
 }

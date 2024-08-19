@@ -15,6 +15,5 @@ public interface TransactionService {
 
     Transaction findById(Integer transactionId);
 
-    void delete(Integer transactionId);
 
 }
