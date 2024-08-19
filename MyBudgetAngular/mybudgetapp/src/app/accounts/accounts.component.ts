@@ -22,17 +22,14 @@ export class AccountsComponent {
   constructor(
     private accountService: AccountService,
     private currencyService: CurrencyService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private dialog: MatDialog
   ) {
     this.loadAccounts();
     this.loadDefaultCurrency();
   }
 
   private loadDefaultCurrency() {
-    this.currencyService
-      .getDefaultCurrency()
-      .subscribe((data: string) => (this.defaultCurrency = data));
+    this.defaultCurrency = this.currencyService.getDefaultCurrency();
   }
 
   private loadAccounts() {
@@ -61,11 +58,6 @@ export class AccountsComponent {
     const dialogRef = this.dialog.open(NewAccountDialogComponent);
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.snackBar.open(
-        'New account ' + (result ? 'was' : "wasn't") + ' added successfuly!',
-        '',
-        { duration: 3000 }
-      );
       if (result) this.loadAccounts();
     });
   }

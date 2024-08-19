@@ -2,13 +2,13 @@ package com.example.mybudgetspring.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class NotFoundException extends HttpException {
+public class NotFoundException extends RuntimeException {
 
     public NotFoundException() {
-        super(HttpStatus.NOT_FOUND, null);
+        super();
     }
 
-    public NotFoundException(Object data) {
-        super(HttpStatus.NOT_FOUND, data);
+    public NotFoundException(String message) {
+        super(message);
     }
 }

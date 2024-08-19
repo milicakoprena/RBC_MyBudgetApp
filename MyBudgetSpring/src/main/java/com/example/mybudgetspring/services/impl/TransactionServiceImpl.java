@@ -1,5 +1,6 @@
 package com.example.mybudgetspring.services.impl;
 
+import com.example.mybudgetspring.exceptions.InsufficientFundsException;
 import com.example.mybudgetspring.exceptions.NotFoundException;
 import com.example.mybudgetspring.model.dto.Transaction;
 import com.example.mybudgetspring.model.entities.AccountEntity;
@@ -75,7 +76,11 @@ public class TransactionServiceImpl implements TransactionService {
         AccountEntity accountEntity = accountEntityRepository.findById(transactionRequest.getAccountId()).get();
         Double convertedAmount = transactionRequest.getAmount() * currencyService.convertCurrency(defaultCurrency, accountEntity.getCurrency());
         Double updatedBalance = accountEntity.getBalance() + convertedAmount;
-        if (updatedBalance < 0) throw new NotFoundException();
+
+        if (updatedBalance < 0) {
+            throw new InsufficientFundsException("Insufficient funds on account.");
+        }
+
         TransactionEntity transactionEntity = modelMapper.map(transactionRequest, TransactionEntity.class);
         transactionEntity.setTransactionId(null);
         transactionEntity.setAmount(convertedAmount);

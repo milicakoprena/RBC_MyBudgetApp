@@ -36,33 +36,24 @@ export class SettingsComponent implements OnInit {
   }
 
   private loadDefaultCurrency() {
-    this.currencyService.getDefaultCurrency().subscribe((data: string) => {
-      this.defaultCurrency = data;
-    });
+    this.defaultCurrency = this.currencyService.getDefaultCurrency();
   }
 
   private loadCurrencies() {
-    this.currencyService.getCurrencies().subscribe(
-      (data: CurrencyResponse[]) => {
-        this.currencies = data.map((currency) => {
-          if (currency.id.toLowerCase() === this.defaultCurrency.toLowerCase())
-            this.myControl.setValue(
-              new CurrencyResponse(currency.id.toUpperCase(), currency.name)
-            );
-          return new CurrencyResponse(currency.id.toUpperCase(), currency.name);
-        });
-
-        this.filteredCurrencies = this.myControl.valueChanges.pipe(
-          startWith(''),
-          map((value) => {
-            const id = typeof value === 'string' ? value : value?.id;
-            return id ? this._filter(id as string) : this.currencies.slice();
-          })
+    this.currencies = this.currencyService.getCurrencies().map((currency) => {
+      if (currency.id.toLowerCase() === this.defaultCurrency.toLowerCase())
+        this.myControl.setValue(
+          new CurrencyResponse(currency.id.toUpperCase(), currency.name)
         );
-      },
-      (error: any) => {
-        console.error('Error consuming currencies:', error);
-      }
+      return new CurrencyResponse(currency.id.toUpperCase(), currency.name);
+    });
+
+    this.filteredCurrencies = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        const id = typeof value === 'string' ? value : value?.id;
+        return id ? this._filter(id as string) : this.currencies.slice();
+      })
     );
   }
 

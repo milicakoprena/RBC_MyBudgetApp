@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   NavigationEnd,
   Router,
@@ -11,6 +11,7 @@ import { FooterComponent } from './custom-components/footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
+import { TransactionsComponent } from './transactions/transactions.component';
 
 @Component({
   selector: 'app-root',

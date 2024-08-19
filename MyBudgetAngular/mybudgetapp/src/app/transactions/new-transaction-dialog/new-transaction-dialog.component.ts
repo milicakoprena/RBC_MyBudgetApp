@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -13,6 +13,8 @@ import { TransactionService } from '../../services/transaction.service';
 import { AccountService } from '../../services/account.service';
 import { Account } from '../../model/account';
 import { TransactionRequest } from '../../model/transaction-request';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-new-transaction-dialog',
@@ -24,11 +26,14 @@ import { TransactionRequest } from '../../model/transaction-request';
 export class NewTransactionDialogComponent {
   public form: FormGroup;
   public accounts: Account[] = [];
+
   constructor(
     public dialogRef: MatDialogRef<NewTransactionDialogComponent>,
     private fb: FormBuilder,
     private transactionService: TransactionService,
     private accountService: AccountService,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: { defaultCurrency: string }
   ) {
     this.form = this.fb.group({
@@ -56,6 +61,7 @@ export class NewTransactionDialogComponent {
               account.defaultCurrencyBalance
             );
           });
+          this.cdr.detectChanges();
         }
       },
       (error: any) => {
@@ -76,10 +82,17 @@ export class NewTransactionDialogComponent {
     };
     this.transactionService.addTransaction(transactionRequest).subscribe(
       (response) => {
+        this.snackBar.open('Transaction added!', '', { duration: 3000 });
         this.dialogRef.close(true);
       },
       (error) => {
-        console.log('Error adding transaction');
+        console.log('Error adding transaction', error);
+        if (error.status === 402)
+          this.snackBar.open(
+            'Transaction failed because od insufficient funds on your account!',
+            '',
+            { duration: 3000 }
+          );
         this.dialogRef.close(false);
       }
     );

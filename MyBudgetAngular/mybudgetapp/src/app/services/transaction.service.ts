@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Transaction } from '../model/transaction';
 import { TransactionRequest } from '../model/transaction-request';
 
@@ -9,6 +9,9 @@ import { TransactionRequest } from '../model/transaction-request';
 })
 export class TransactionService {
   private apiUrl = 'http://localhost:8080/transactions';
+  private refreshTransactionsSubject = new Subject<void>();
+
+  refreshTransactions$ = this.refreshTransactionsSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {}
 
@@ -18,5 +21,9 @@ export class TransactionService {
 
   addTransaction(transactionRequest: TransactionRequest) {
     return this.httpClient.post(this.apiUrl, transactionRequest);
+  }
+
+  notifyRefreshTransactions() {
+    this.refreshTransactionsSubject.next();
   }
 }

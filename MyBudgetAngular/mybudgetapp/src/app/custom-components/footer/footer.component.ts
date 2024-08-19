@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AppMaterialModule } from '../../app-material/app-material.module';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../services/account.service';
 import { CurrencyService } from '../../services/currency.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewTransactionDialogComponent } from '../../transactions/new-transaction-dialog/new-transaction-dialog.component';
+import { TransactionService } from '../../services/transaction.service';
 
 @Component({
   selector: 'app-footer',
@@ -19,6 +20,7 @@ export class FooterComponent {
 
   constructor(
     private accountService: AccountService,
+    private transactionService: TransactionService,
     private currencyService: CurrencyService,
     private dialog: MatDialog
   ) {
@@ -33,14 +35,17 @@ export class FooterComponent {
   }
 
   private loadDefaultCurrency() {
-    this.currencyService
-      .getDefaultCurrency()
-      .subscribe((data: string) => (this.defaultCurrency = data));
+    this.defaultCurrency = this.currencyService.getDefaultCurrency();
   }
 
   public openTransactionDialog() {
-    this.dialog.open(NewTransactionDialogComponent, {
+    const dialogRef = this.dialog.open(NewTransactionDialogComponent, {
       data: { defaultCurrency: this.defaultCurrency },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.transactionService.notifyRefreshTransactions();
+      }
     });
   }
 }

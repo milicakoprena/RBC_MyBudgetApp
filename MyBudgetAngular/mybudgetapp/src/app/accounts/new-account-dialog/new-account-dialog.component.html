@@ -14,7 +14,11 @@
         [matAutocomplete]="auto"
         required
       />
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="displayFn"
+        (optionSelected)="onOptionSelected($event.option.value)"
+      >
         <mat-option
           *ngFor="let currency of filteredCurrencies | async"
           [value]="currency"
@@ -36,7 +40,7 @@
           min="0"
           required
         />
-        <span class="currency-suffix">{{ defaultCurrency }}</span>
+        <span class="currency-suffix">{{ chosenCurrency }}</span>
       </div>
     </mat-form-field>
     <button mat-button class="form-button" type="submit">Add</button>

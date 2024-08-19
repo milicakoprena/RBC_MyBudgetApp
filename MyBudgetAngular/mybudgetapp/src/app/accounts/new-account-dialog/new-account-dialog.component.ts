@@ -15,6 +15,8 @@ import { Observable, map, startWith } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AccountRequest } from '../../model/account-request';
 import { AccountService } from '../../services/account.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-new-account-dialog',
@@ -30,11 +32,13 @@ export class NewAccountDialogComponent implements OnInit {
     CurrencyResponse[]
   >();
   public defaultCurrency: string = '';
+  public chosenCurrency: string = '';
   public form: FormGroup;
   constructor(
     public dialogRef: MatDialogRef<NewAccountDialogComponent>,
     private currencyService: CurrencyService,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
     private accountService: AccountService
   ) {
     this.form = this.fb.group({
@@ -49,33 +53,25 @@ export class NewAccountDialogComponent implements OnInit {
   }
 
   private loadDefaultCurrency() {
-    this.currencyService.getDefaultCurrency().subscribe((data: string) => {
-      this.defaultCurrency = data;
-    });
+    this.defaultCurrency = this.chosenCurrency =
+      this.currencyService.getDefaultCurrency();
   }
 
   private loadCurrencies() {
-    this.currencyService.getCurrencies().subscribe(
-      (data: CurrencyResponse[]) => {
-        this.currencies = data.map((currency) => {
-          if (currency.id.toLowerCase() === this.defaultCurrency.toLowerCase())
-            this.myControl.setValue(
-              new CurrencyResponse(currency.id.toUpperCase(), currency.name)
-            );
-          return new CurrencyResponse(currency.id.toUpperCase(), currency.name);
-        });
-
-        this.filteredCurrencies = this.myControl.valueChanges.pipe(
-          startWith(''),
-          map((value) => {
-            const id = typeof value === 'string' ? value : value?.id;
-            return id ? this._filter(id as string) : this.currencies.slice();
-          })
+    this.currencies = this.currencyService.getCurrencies().map((currency) => {
+      if (currency.id.toLowerCase() === this.defaultCurrency.toLowerCase())
+        this.myControl.setValue(
+          new CurrencyResponse(currency.id.toUpperCase(), currency.name)
         );
-      },
-      (error: any) => {
-        console.error('Error consuming currencies:', error);
-      }
+      return new CurrencyResponse(currency.id.toUpperCase(), currency.name);
+    });
+
+    this.filteredCurrencies = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        const id = typeof value === 'string' ? value : value?.id;
+        return id ? this._filter(id as string) : this.currencies.slice();
+      })
     );
   }
 
@@ -98,12 +94,18 @@ export class NewAccountDialogComponent implements OnInit {
     };
     this.accountService.addAccount(accountRequest).subscribe(
       (response) => {
+        this.snackBar.open('Account added!', '', { duration: 3000 });
         this.dialogRef.close(true);
       },
       (error) => {
         console.log('Error adding account', error);
-        this.dialogRef.close(false);
+        this.snackBar.open('Error adding account!', '', { duration: 3000 });
+        this.dialogRef.close();
       }
     );
+  }
+
+  onOptionSelected(currency: CurrencyResponse) {
+    this.chosenCurrency = currency.id;
   }
 }

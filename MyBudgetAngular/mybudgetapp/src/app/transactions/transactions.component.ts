@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Transaction } from '../model/transaction';
 import { TransactionService } from '../services/transaction.service';
 import { CurrencyService } from '../services/currency.service';
@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { Account } from '../model/account';
 import { AccountService } from '../services/account.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-transactions',
@@ -17,28 +18,38 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })
-export class TransactionsComponent {
+export class TransactionsComponent implements OnInit, OnDestroy {
   public transactions: Transaction[] = [];
   public filteredTransactions: Transaction[] = [];
   public accounts: Account[] = [];
   public defaultCurrency: string = '';
 
+  private subscription: Subscription = new Subscription();
+
   constructor(
     private transactionService: TransactionService,
     private currencyService: CurrencyService,
-    private accountService: AccountService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private accountService: AccountService
   ) {
     this.loadTransactions();
     this.loadAccounts();
     this.loadDefaultCurrency();
   }
+  ngOnInit(): void {
+    this.subscription = this.transactionService.refreshTransactions$.subscribe(
+      () => {
+        this.loadTransactions();
+      }
+    );
+  }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
   private loadDefaultCurrency() {
-    this.currencyService
-      .getDefaultCurrency()
-      .subscribe((data: string) => (this.defaultCurrency = data));
+    this.defaultCurrency = this.currencyService.getDefaultCurrency();
   }
 
   private loadAccounts() {
@@ -62,7 +73,7 @@ export class TransactionsComponent {
     );
   }
 
-  private loadTransactions() {
+  public loadTransactions() {
     this.transactions = [];
     this.transactionService.getTransactions().subscribe(
       (data: Transaction[]) => {
@@ -85,8 +96,6 @@ export class TransactionsComponent {
       }
     );
   }
-
-  public openAccountDialog() {}
 
   onOptionSelected(accountId: number): void {
     this.filteredTransactions = this.transactions.filter(
