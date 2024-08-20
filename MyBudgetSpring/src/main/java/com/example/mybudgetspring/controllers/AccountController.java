@@ -19,7 +19,7 @@ public class AccountController {
     private final AccountService accountService;
     private final DefaultCurrencyService defaultCurrencyService;
 
-    public AccountController(AccountService accountService, CurrencyService currencyService, DefaultCurrencyService defaultCurrencyService) {
+    public AccountController(AccountService accountService, DefaultCurrencyService defaultCurrencyService) {
         this.accountService = accountService;
         this.defaultCurrencyService = defaultCurrencyService;
     }

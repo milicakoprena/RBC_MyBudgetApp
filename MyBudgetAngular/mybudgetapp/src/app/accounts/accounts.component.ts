@@ -6,7 +6,6 @@ import { AppMaterialModule } from '../app-material/app-material.module';
 import { CommonModule } from '@angular/common';
 import { NewAccountDialogComponent } from './new-account-dialog/new-account-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 
 @Component({

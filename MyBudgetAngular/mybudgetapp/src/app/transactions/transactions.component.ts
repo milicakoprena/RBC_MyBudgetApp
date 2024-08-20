@@ -2,8 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Transaction } from '../model/transaction';
 import { TransactionService } from '../services/transaction.service';
 import { CurrencyService } from '../services/currency.service';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppMaterialModule } from '../app-material/app-material.module';
 import { CommonModule } from '@angular/common';
 import { Account } from '../model/account';

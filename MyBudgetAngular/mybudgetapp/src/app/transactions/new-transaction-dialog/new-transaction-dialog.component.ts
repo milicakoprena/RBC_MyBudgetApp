@@ -14,7 +14,6 @@ import { AccountService } from '../../services/account.service';
 import { Account } from '../../model/account';
 import { TransactionRequest } from '../../model/transaction-request';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-new-transaction-dialog',
@@ -93,6 +92,11 @@ export class NewTransactionDialogComponent {
             '',
             { duration: 3000 }
           );
+        else {
+          this.snackBar.open('Error adding transaction!', '', {
+            duration: 3000,
+          });
+        }
         this.dialogRef.close(false);
       }
     );
