@@ -1,7 +1,7 @@
 <div class="accounts-card">
   <mat-card>
     <mat-card-content>
-      <div class="account" *ngFor="let account of accounts">
+      <div class="mat-card-item" *ngFor="let account of accounts">
         <div class="account-name">{{ account.name }}</div>
         <div class="account-balance">
           <div class="default-currency-balance">
@@ -17,5 +17,7 @@
       </div>
     </mat-card-content>
   </mat-card>
-  <button mat-button (click)="openAccountDialog()">New account</button>
+  <button class="new-button" mat-button (click)="openAccountDialog()">
+    New account
+  </button>
 </div>

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Account } from '../model/account';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AccountRequest } from '../model/account-request';
 
 @Injectable({
@@ -9,6 +9,12 @@ import { AccountRequest } from '../model/account-request';
 })
 export class AccountService {
   private apiUrl = 'http://localhost:8080/accounts';
+
+  private refreshAccountsSubject = new Subject<void>();
+  refreshAccounts$ = this.refreshAccountsSubject.asObservable();
+
+  private refreshBalanceSource = new Subject<void>();
+  refreshBalance$ = this.refreshBalanceSource.asObservable();
 
   constructor(private httpClient: HttpClient) {}
 
@@ -26,5 +32,13 @@ export class AccountService {
 
   deleteAllAccounts() {
     return this.httpClient.delete(this.apiUrl);
+  }
+
+  notifyRefreshAccounts() {
+    this.refreshAccountsSubject.next();
+  }
+
+  notifyRefreshBalance() {
+    this.refreshBalanceSource.next();
   }
 }

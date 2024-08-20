@@ -26,6 +26,9 @@ export class FooterComponent {
   ) {
     this.loadBalanceSum();
     this.loadDefaultCurrency();
+    this.accountService.refreshBalance$.subscribe(() => {
+      this.loadBalanceSum();
+    });
   }
 
   private loadBalanceSum() {
@@ -45,6 +48,8 @@ export class FooterComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.transactionService.notifyRefreshTransactions();
+        this.accountService.notifyRefreshAccounts();
+        this.loadBalanceSum();
       }
     });
   }

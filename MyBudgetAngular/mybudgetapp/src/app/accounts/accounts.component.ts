@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Account } from '../model/account';
 import { AccountService } from '../services/account.service';
 import { CurrencyService } from '../services/currency.service';
@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { NewAccountDialogComponent } from './new-account-dialog/new-account-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-accounts',
@@ -15,9 +16,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.css',
 })
-export class AccountsComponent {
+export class AccountsComponent implements OnInit {
   public accounts: Account[] = [];
   public defaultCurrency: string = '';
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private accountService: AccountService,
@@ -26,6 +28,17 @@ export class AccountsComponent {
   ) {
     this.loadAccounts();
     this.loadDefaultCurrency();
+  }
+
+  ngOnInit(): void {
+    this.subscription = this.accountService.refreshAccounts$.subscribe(() => {
+      this.loadAccounts();
+    });
+  }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   private loadDefaultCurrency() {
@@ -58,7 +71,10 @@ export class AccountsComponent {
     const dialogRef = this.dialog.open(NewAccountDialogComponent);
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) this.loadAccounts();
+      if (result) {
+        this.loadAccounts();
+        this.accountService.notifyRefreshBalance();
+      }
     });
   }
 }

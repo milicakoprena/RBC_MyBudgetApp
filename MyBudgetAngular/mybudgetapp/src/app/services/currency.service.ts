@@ -25,13 +25,15 @@ export class CurrencyService {
         let currencies = data.map((currency) => {
           return new CurrencyResponse(currency.id, currency.name);
         });
-        localStorage.setItem(this.CURRENCIES_KEY, JSON.stringify(currencies));
+        if (typeof localStorage != 'undefined')
+          localStorage.setItem(this.CURRENCIES_KEY, JSON.stringify(currencies));
       });
-    console.log('ucitavanje');
   }
 
   getCurrencies(): CurrencyResponse[] {
-    return JSON.parse(localStorage.getItem(this.CURRENCIES_KEY)!) || [];
+    if (typeof localStorage != 'undefined')
+      return JSON.parse(localStorage.getItem(this.CURRENCIES_KEY)!);
+    return [];
   }
 
   loadDefaultCurrency(): void {
@@ -40,18 +42,22 @@ export class CurrencyService {
         responseType: 'text',
       })
       .subscribe((currency) => {
-        localStorage.setItem(this.DEFAULT_CURRENCY_KEY, currency);
+        if (typeof localStorage != 'undefined')
+          localStorage.setItem(this.DEFAULT_CURRENCY_KEY, currency);
       });
   }
 
   getDefaultCurrency(): string {
-    return localStorage.getItem(this.DEFAULT_CURRENCY_KEY) || '';
+    if (typeof localStorage != 'undefined')
+      return localStorage.getItem(this.DEFAULT_CURRENCY_KEY)!;
+    return '';
   }
 
   updateDefaultCurrency(defaultCurrency: string) {
     return this.httpClient.put(`${this.apiUrl}/update`, defaultCurrency).pipe(
       tap(() => {
-        localStorage.setItem(this.DEFAULT_CURRENCY_KEY, defaultCurrency);
+        if (typeof localStorage != 'undefined')
+          localStorage.setItem(this.DEFAULT_CURRENCY_KEY, defaultCurrency);
       })
     );
   }
@@ -62,11 +68,14 @@ export class CurrencyService {
         responseType: 'text',
       })
       .subscribe((date) => {
-        localStorage.setItem(this.EXCHANGE_RATE_DATE_KEY, date);
+        if (typeof localStorage != 'undefined')
+          localStorage.setItem(this.EXCHANGE_RATE_DATE_KEY, date);
       });
   }
 
   getLatestExchangeRateDate() {
-    return localStorage.getItem(this.EXCHANGE_RATE_DATE_KEY) || '';
+    if (typeof localStorage != 'undefined')
+      return localStorage.getItem(this.EXCHANGE_RATE_DATE_KEY)!;
+    return '';
   }
 }

@@ -31,3 +31,47 @@ mat-toolbar button {
 .buttons {
   gap: 10px;
 }
+
+@media (max-width: 768px) {
+  mat-toolbar {
+    padding: 10px;
+  }
+
+  mat-toolbar mat-toolbar-row {
+    width: 80%;
+  }
+
+  .toolbar-title {
+    font-size: 24px;
+  }
+
+  mat-toolbar button {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  mat-toolbar {
+    padding: 8px;
+  }
+
+  mat-toolbar mat-toolbar-row {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .toolbar-title {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  mat-toolbar button {
+    font-size: 14px;
+  }
+
+  .buttons {
+    gap: 5px;
+    flex-direction: column;
+  }
+}

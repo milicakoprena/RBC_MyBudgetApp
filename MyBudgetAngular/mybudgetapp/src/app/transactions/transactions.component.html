@@ -10,7 +10,10 @@
 
   <mat-card>
     <mat-card-content>
-      <div class="transaction" *ngFor="let transaction of filteredTransactions">
+      <div
+        class="mat-card-item"
+        *ngFor="let transaction of filteredTransactions"
+      >
         <div class="transaction-details">
           <div class="transaction-name">{{ transaction.description }}</div>
           <div class="account-name">{{ transaction.account.name }}</div>
