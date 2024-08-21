@@ -12,4 +12,12 @@ public class TransactionRequest {
     private Double amount;
     @NotNull
     private Integer accountId;
+
+    public TransactionRequest(){}
+
+    public TransactionRequest(String description, Double amount, Integer accountId) {
+        this.description = description;
+        this.amount = amount;
+        this.accountId = accountId;
+    }
 }

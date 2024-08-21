@@ -12,4 +12,12 @@ public class AccountRequest {
     private String currency;
     @NotNull
     private Double balance;
+
+    public AccountRequest(){}
+
+    public AccountRequest(String name, String currency, Double balance) {
+        this.name = name;
+        this.currency = currency;
+        this.balance = balance;
+    }
 }
